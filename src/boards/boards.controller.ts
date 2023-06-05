@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -24,5 +25,10 @@ export class BoardsController {
   @Get('/:id')
   getBoard(@Param('id') id: number) {
     return this.boardsService.getBoard(id);
+  }
+
+  @Delete('/:id')
+  deleteBoard(@Param('id') id: number): Promise<void> {
+    return this.boardsService.deleteBoard(id);
   }
 }

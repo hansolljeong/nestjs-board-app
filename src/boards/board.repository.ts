@@ -1,4 +1,4 @@
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, DeleteResult, Repository } from 'typeorm';
 import { Board } from './board.entity';
 import { Injectable } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -27,5 +27,9 @@ export class BoardRepository {
 
   async getBoard(id: number) {
     return this.#boardRepository.findOneBy({ id });
+  }
+
+  async deleteBoard(id: number): Promise<DeleteResult> {
+    return this.#boardRepository.delete(id);
   }
 }
