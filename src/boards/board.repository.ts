@@ -25,7 +25,7 @@ export class BoardRepository {
     return board;
   }
 
-  async findOne(id: number) {
+  async getBoard(id: number) {
     return this.#boardRepository.findOneBy({ id });
   }
 }
