@@ -25,7 +25,7 @@ export class BoardRepository {
     return board;
   }
 
-  async getBoard(id: number) {
+  async getBoard(id: number): Promise<Board> {
     return this.#boardRepository.findOneBy({ id });
   }
 
