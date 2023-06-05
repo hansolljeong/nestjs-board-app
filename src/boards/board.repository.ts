@@ -32,4 +32,11 @@ export class BoardRepository {
   async deleteBoard(id: number): Promise<DeleteResult> {
     return this.#boardRepository.delete(id);
   }
+
+  async updateBoard(id: number, status: BoardStatus): Promise<Board> {
+    const board = await this.getBoard(id);
+
+    board.status = status;
+    return this.#boardRepository.save(board);
+  }
 }
