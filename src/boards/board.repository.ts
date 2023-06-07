@@ -12,7 +12,7 @@ export class BoardRepository {
     this.#boardRepository = this.dataSource.getRepository(Board);
   }
 
-  async createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
+  createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
     const { title, description } = createBoardDto;
 
     const board = this.#boardRepository.create({
@@ -21,22 +21,19 @@ export class BoardRepository {
       status: BoardStatus.PUBLIC,
     });
 
-    await this.#boardRepository.save(board);
-    return board;
+    return this.#boardRepository.save(board);
   }
 
-  async getBoard(id: number): Promise<Board> {
+  getBoard(id: number): Promise<Board> {
     return this.#boardRepository.findOneBy({ id });
   }
 
-  async deleteBoard(id: number): Promise<DeleteResult> {
+  deleteBoard(id: number): Promise<DeleteResult> {
     return this.#boardRepository.delete(id);
   }
 
   async updateBoard(id: number, status: BoardStatus): Promise<Board> {
-    const board = await this.getBoard(id);
-
-    board.status = status;
-    return this.#boardRepository.save(board);
+    await this.#boardRepository.update(id, { status });
+    return this.getBoard(id);
   }
 }
