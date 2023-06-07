@@ -31,6 +31,11 @@ export class BoardsController {
     return this.boardsService.getBoard(id);
   }
 
+  @Get()
+  getBoards(): Promise<Board[]> {
+    return this.boardsService.getBoards();
+  }
+
   @Delete('/:id')
   deleteBoard(@Param('id') id: number): Promise<void> {
     return this.boardsService.deleteBoard(id);

@@ -28,6 +28,10 @@ export class BoardRepository {
     return this.#boardRepository.findOneBy({ id });
   }
 
+  getBoards(): Promise<Board[]> {
+    return this.#boardRepository.find();
+  }
+
   deleteBoard(id: number): Promise<DeleteResult> {
     return this.#boardRepository.delete(id);
   }
