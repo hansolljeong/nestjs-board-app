@@ -16,6 +16,7 @@ export class UserRepository {
     this.#userRepository = this.dataSource.getRepository(UserEntity);
   }
 
+  // @TODO: 비즈니스 로직 service로 분리하기
   async createUser(authCredentialDto: AuthCredentialDto): Promise<UserEntity> {
     const { username, password } = authCredentialDto;
 
