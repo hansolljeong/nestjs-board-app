@@ -16,7 +16,7 @@ export class UserRepository {
     this.#userRepository = this.dataSource.getRepository(UserEntity);
   }
 
-  async findOneByUsername(username: string): Promise<UserEntity | undefined> {
+  async findOneByUsername(username: string): Promise<UserEntity> {
     return this.#userRepository.findOneBy({ username });
   }
 

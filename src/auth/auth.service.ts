@@ -16,9 +16,8 @@ export class AuthService {
     const { username, password } = authCredentialDto;
 
     const user = await this.userRepository.findOneByUsername(username);
-    const validatePassword = await bcrypt.compare(password, user.password);
 
-    if (user && validatePassword) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       return 'login success';
     } else {
       throw new UnauthorizedException('login failed');
