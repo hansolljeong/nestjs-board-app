@@ -16,12 +16,15 @@ export class UserRepository {
     this.#userRepository = this.dataSource.getRepository(UserEntity);
   }
 
+  async findOneByUsername(username: string): Promise<UserEntity | undefined> {
+    return this.#userRepository.findOneBy({ username });
+  }
+
   // @TODO: 비즈니스 로직 service로 분리하기
   async createUser(authCredentialDto: AuthCredentialDto): Promise<UserEntity> {
     const { username, password } = authCredentialDto;
 
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await this.hashPassword(password);
 
     const user = this.#userRepository.create({
       username,
@@ -37,5 +40,10 @@ export class UserRepository {
         throw new InternalServerErrorException();
       }
     }
+  }
+
+  async hashPassword(password: string): Promise<string> {
+    const salt = await bcrypt.genSalt();
+    return await bcrypt.hash(password, salt);
   }
 }
