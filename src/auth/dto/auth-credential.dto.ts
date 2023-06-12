@@ -14,3 +14,7 @@ export class AuthCredentialDto {
   })
   password: string;
 }
+
+export class SignInResultDto {
+  accessToken: string;
+}
