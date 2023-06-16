@@ -15,6 +15,7 @@ import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardEntity } from './board.entity';
 import { BoardStatus } from './board-status.enum';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
+import { UserEntity } from 'src/auth/user.entity';
 
 @Controller('boards')
 export class BoardsController {
@@ -22,8 +23,11 @@ export class BoardsController {
 
   @Post()
   @UsePipes(ValidationPipe)
-  createBoard(@Body() createBoardDto: CreateBoardDto): Promise<BoardEntity> {
-    return this.boardsService.createBoard(createBoardDto);
+  createBoard(
+    @Body() createBoardDto: CreateBoardDto,
+    user: UserEntity,
+  ): Promise<BoardEntity> {
+    return this.boardsService.createBoard(createBoardDto, user);
   }
 
   @Get('/:id')
