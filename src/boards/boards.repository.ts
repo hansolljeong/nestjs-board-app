@@ -29,6 +29,13 @@ export class BoardRepository {
     return this.#boardRepository.save(board);
   }
 
+  getBoardsByUser(user: UserEntity): Promise<BoardEntity[]> {
+    return this.#boardRepository
+      .createQueryBuilder('board')
+      .where('board.userId = :userId', { userId: user.id })
+      .getMany();
+  }
+
   getBoard(id: number): Promise<BoardEntity> {
     return this.#boardRepository.findOneBy({ id });
   }

@@ -16,6 +16,10 @@ export class BoardsService {
     return this.boardRepository.createBoard(createBoardDto, user);
   }
 
+  getBoardsByUser(user: UserEntity): Promise<BoardEntity[]> {
+    return this.boardRepository.getBoardsByUser(user);
+  }
+
   async getBoard(id: number): Promise<BoardEntity> {
     const found = await this.boardRepository.getBoard(id);
 

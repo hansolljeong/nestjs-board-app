@@ -34,6 +34,12 @@ export class BoardsController {
     return this.boardsService.createBoard(createBoardDto, user);
   }
 
+  @Get('/user')
+  @UseGuards(AuthGuard('jwt'))
+  getBoardsByUser(@GetUser() user: UserEntity): Promise<BoardEntity[]> {
+    return this.boardsService.getBoardsByUser(user);
+  }
+
   @Get('/:id')
   getBoard(@Param('id') id: number): Promise<BoardEntity> {
     return this.boardsService.getBoard(id);
