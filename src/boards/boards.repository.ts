@@ -48,8 +48,12 @@ export class BoardRepository {
     return this.#boardRepository.delete(id);
   }
 
-  async updateBoard(id: number, status: BoardStatus): Promise<BoardEntity> {
-    await this.#boardRepository.update(id, { status });
+  async updateBoard(
+    id: number,
+    status: BoardStatus,
+    user: UserEntity,
+  ): Promise<BoardEntity> {
+    await this.#boardRepository.update(id, { user, status });
     return this.getBoard(id);
   }
 }

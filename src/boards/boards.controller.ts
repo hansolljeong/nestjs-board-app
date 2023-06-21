@@ -18,15 +18,15 @@ import { BoardStatus } from './board-status.enum';
 import { BoardStatusValidationPipe } from './pipes/board-status-validation.pipe';
 import { UserEntity } from 'src/auth/user.entity';
 import { GetUser } from 'src/auth/decorator/get-user.decorator';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtGuard } from 'src/jwt/jwt.guard';
 
 @Controller('boards')
 export class BoardsController {
   constructor(private boardsService: BoardsService) {}
 
+  @UseGuards(JwtGuard)
   @Post()
   @UsePipes(ValidationPipe)
-  @UseGuards(AuthGuard('jwt'))
   createBoard(
     @Body() createBoardDto: CreateBoardDto,
     @GetUser() user: UserEntity,
@@ -34,8 +34,8 @@ export class BoardsController {
     return this.boardsService.createBoard(createBoardDto, user);
   }
 
+  @UseGuards(JwtGuard)
   @Get('/user')
-  @UseGuards(AuthGuard('jwt'))
   getBoardsByUser(@GetUser() user: UserEntity): Promise<BoardEntity[]> {
     return this.boardsService.getBoardsByUser(user);
   }
@@ -55,11 +55,13 @@ export class BoardsController {
     return this.boardsService.deleteBoard(id);
   }
 
+  @UseGuards(JwtGuard)
   @Patch('/:id')
   updateBoard(
     @Param('id', ParseIntPipe) id: number,
     @Body('status', BoardStatusValidationPipe) status: BoardStatus,
-  ) {
-    return this.boardsService.updateBoard(id, status);
+    @GetUser() user: UserEntity,
+  ): Promise<BoardEntity> {
+    return this.boardsService.updateBoard(id, status, user);
   }
 }

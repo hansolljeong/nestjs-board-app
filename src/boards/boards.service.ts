@@ -42,7 +42,11 @@ export class BoardsService {
     }
   }
 
-  async updateBoard(id: number, status: BoardStatus): Promise<BoardEntity> {
-    return this.boardRepository.updateBoard(id, status);
+  async updateBoard(
+    id: number,
+    status: BoardStatus,
+    user: UserEntity,
+  ): Promise<BoardEntity> {
+    return this.boardRepository.updateBoard(id, status, user);
   }
 }
