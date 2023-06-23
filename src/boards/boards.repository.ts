@@ -44,16 +44,19 @@ export class BoardRepository {
     return this.#boardRepository.find();
   }
 
+  async getBoardWithUserInfo(id: number): Promise<BoardEntity> {
+    return await this.#boardRepository.findOne({
+      where: { id },
+      relations: { user: true },
+    });
+  }
+
   deleteBoard(id: number): Promise<DeleteResult> {
     return this.#boardRepository.delete(id);
   }
 
-  async updateBoard(
-    id: number,
-    status: BoardStatus,
-    user: UserEntity,
-  ): Promise<BoardEntity> {
-    await this.#boardRepository.update(id, { user, status });
+  async updateBoard(id: number, status: BoardStatus): Promise<BoardEntity> {
+    await this.#boardRepository.update(id, { status });
     return this.getBoard(id);
   }
 }

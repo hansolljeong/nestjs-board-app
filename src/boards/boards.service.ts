@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardEntity } from './board.entity';
 import { BoardRepository } from './boards.repository';
@@ -47,6 +51,22 @@ export class BoardsService {
     status: BoardStatus,
     user: UserEntity,
   ): Promise<BoardEntity> {
-    return this.boardRepository.updateBoard(id, status, user);
+    const boardWithUserInfo = await this.boardRepository.getBoardWithUserInfo(
+      id,
+    );
+
+    if (!boardWithUserInfo) {
+      throw new NotFoundException(`Can't find Board with id ${id}`);
+    }
+
+    const hasPermission = user.id === boardWithUserInfo.user.id;
+
+    if (!hasPermission) {
+      throw new ForbiddenException(
+        "You don't have permission to update this board.",
+      );
+    }
+
+    return this.boardRepository.updateBoard(id, status);
   }
 }
