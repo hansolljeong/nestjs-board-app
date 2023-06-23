@@ -50,9 +50,10 @@ export class BoardsController {
     return this.boardsService.getBoards();
   }
 
+  @UseGuards(JwtGuard)
   @Delete('/:id')
-  deleteBoard(@Param('id') id: number): Promise<void> {
-    return this.boardsService.deleteBoard(id);
+  deleteBoard(@Param('id') id: number, @GetUser() user: UserEntity): void {
+    this.boardsService.deleteBoard(id, user);
   }
 
   @UseGuards(JwtGuard)

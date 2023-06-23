@@ -1,4 +1,4 @@
-import { DataSource, DeleteResult, Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { BoardEntity } from './board.entity';
 import { Injectable } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -51,8 +51,8 @@ export class BoardRepository {
     });
   }
 
-  deleteBoard(id: number): Promise<DeleteResult> {
-    return this.#boardRepository.delete(id);
+  deleteBoard(id: number): void {
+    this.#boardRepository.delete(id);
   }
 
   async updateBoard(id: number, status: BoardStatus): Promise<BoardEntity> {

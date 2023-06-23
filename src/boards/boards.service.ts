@@ -38,12 +38,24 @@ export class BoardsService {
     return this.boardRepository.getBoards();
   }
 
-  async deleteBoard(id: number): Promise<void> {
-    const result = await this.boardRepository.deleteBoard(id);
+  async deleteBoard(id: number, user: UserEntity): Promise<void> {
+    const boardWithUserInfo = await this.boardRepository.getBoardWithUserInfo(
+      id,
+    );
 
-    if (result.affected === 0) {
+    if (!boardWithUserInfo) {
       throw new NotFoundException(`Can't find Board with id ${id}`);
     }
+
+    const hasPermission = user.id === boardWithUserInfo.user.id;
+
+    if (!hasPermission) {
+      throw new ForbiddenException(
+        "You don't have permission to delete this board.",
+      );
+    }
+
+    this.boardRepository.deleteBoard(id);
   }
 
   async updateBoard(
