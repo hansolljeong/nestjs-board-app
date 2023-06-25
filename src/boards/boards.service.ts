@@ -5,27 +5,27 @@ import {
 } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardEntity } from './board.entity';
-import { BoardRepository } from './boards.repository';
+import { BoardsRepository } from './boards.repository';
 import { BoardStatus } from './board-status.enum';
 import { UserEntity } from 'src/auth/user.entity';
 
 @Injectable()
 export class BoardsService {
-  constructor(private readonly boardRepository: BoardRepository) {}
+  constructor(private readonly boardsRepository: BoardsRepository) {}
 
   createBoard(
     createBoardDto: CreateBoardDto,
     user: UserEntity,
   ): Promise<BoardEntity> {
-    return this.boardRepository.createBoard(createBoardDto, user);
+    return this.boardsRepository.createBoard(createBoardDto, user);
   }
 
   getBoardsByUser(user: UserEntity): Promise<BoardEntity[]> {
-    return this.boardRepository.getBoardsByUser(user);
+    return this.boardsRepository.getBoardsByUser(user);
   }
 
   async getBoard(id: number): Promise<BoardEntity> {
-    const found = await this.boardRepository.getBoard(id);
+    const found = await this.boardsRepository.getBoard(id);
 
     if (!found) {
       throw new NotFoundException(`Can't find Board with id ${id}`);
@@ -35,11 +35,11 @@ export class BoardsService {
   }
 
   getBoards(): Promise<BoardEntity[]> {
-    return this.boardRepository.getBoards();
+    return this.boardsRepository.getBoards();
   }
 
   async deleteBoard(id: number, user: UserEntity): Promise<void> {
-    const boardWithUserInfo = await this.boardRepository.getBoardWithUserInfo(
+    const boardWithUserInfo = await this.boardsRepository.getBoardWithUserInfo(
       id,
     );
 
@@ -55,7 +55,7 @@ export class BoardsService {
       );
     }
 
-    this.boardRepository.deleteBoard(id);
+    this.boardsRepository.deleteBoard(id);
   }
 
   async updateBoard(
@@ -63,7 +63,7 @@ export class BoardsService {
     status: BoardStatus,
     user: UserEntity,
   ): Promise<BoardEntity> {
-    const boardWithUserInfo = await this.boardRepository.getBoardWithUserInfo(
+    const boardWithUserInfo = await this.boardsRepository.getBoardWithUserInfo(
       id,
     );
 
@@ -79,6 +79,6 @@ export class BoardsService {
       );
     }
 
-    return this.boardRepository.updateBoard(id, status);
+    return this.boardsRepository.updateBoard(id, status);
   }
 }
